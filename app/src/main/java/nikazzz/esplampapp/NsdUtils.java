@@ -7,7 +7,7 @@ import android.util.Log;
 
 import java.net.InetAddress;
 
-public class NsdUtils extends MainActivity{
+public class NsdUtils{
     private Context mContext;
 
     private NsdManager mNsdManager;
@@ -57,6 +57,7 @@ public class NsdUtils extends MainActivity{
             @Override
             public void onServiceLost(NsdServiceInfo service) {
                 Log.e(TAG, "service lost" + service);
+                MainActivity.LAMPONLINE = false;
                 if (mService == service) {
                     mService = null;
                 }
@@ -87,6 +88,7 @@ public class NsdUtils extends MainActivity{
             @Override
             public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
                 Log.e(TAG, "Resolve failed" + errorCode);
+
             }
 
             @Override
@@ -96,10 +98,14 @@ public class NsdUtils extends MainActivity{
 
                 if (serviceInfo.getServiceName().equals(mServiceName)) {
                     Log.d(TAG, "Same IP.");
+                    MainActivity.IP = serviceInfo.getHost();
+                    MainActivity.PORT = serviceInfo.getPort();
+                    MainActivity.LAMPONLINE = true;
                     return;
                 }
                 mService = serviceInfo;
             }
+
         };
     }
     public void discoverServices() {
