@@ -1,5 +1,6 @@
 package nikazzz.esplampapp;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -41,11 +43,11 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         mNsdUtils.discoverServices();
         Client = new UDP_Client();
 
-        redSeekBar = (SeekBar)findViewById(R.id.redSeekBar);
+        redSeekBar = findViewById(R.id.redSeekBar);
         redSeekBar.setOnSeekBarChangeListener(this);
-        greenSeekBar = (SeekBar)findViewById(R.id.greenSeekBar);
+        greenSeekBar = findViewById(R.id.greenSeekBar);
         greenSeekBar.setOnSeekBarChangeListener(this);
-        blueSeekBar = (SeekBar)findViewById(R.id.blueSeekBar);
+        blueSeekBar = findViewById(R.id.blueSeekBar);
         blueSeekBar.setOnSeekBarChangeListener(this);
 
 
@@ -69,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (LAMPONLINE){
-            Color mColor = new Color();
             int red = redSeekBar.getProgress();
             int green = greenSeekBar.getProgress();
             int blue = blueSeekBar.getProgress();
