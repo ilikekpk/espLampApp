@@ -14,7 +14,7 @@ public class UDP_Client {
     public String Message;
 
     @SuppressLint({"NewApi", "StaticFieldLeak"})
-    public void NachrichtSenden() {
+    public void NachrichtSenden(final InetAddress ip, final int port) {
         async_cient = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -25,7 +25,8 @@ public class UDP_Client {
                     DatagramPacket dp;
                     InetAddress local = InetAddress.getByName(MainActivity.IP.getHostAddress());
                     dp = new DatagramPacket(Message.getBytes(), Message.length(), local, MainActivity.PORT);
-                    ds.setBroadcast(true);
+                    //ds.setBroadcast(true);
+                    ds.connect(ip, port);
                     ds.send(dp);
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -29,8 +29,9 @@ public class NsdUtils{
 
     public void initializeNsd() {
 
-        initializeDiscoveryListener();
         initializeResolveListener();
+        initializeDiscoveryListener();
+
     }
 
     private void initializeDiscoveryListener() {

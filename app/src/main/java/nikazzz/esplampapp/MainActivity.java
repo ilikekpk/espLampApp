@@ -1,5 +1,6 @@
 package nikazzz.esplampapp;
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -14,41 +15,68 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener{
-    TextView txt;
+    View colorView;
+    TextView connectTxt;
     NsdUtils mNsdUtils;
     static InetAddress IP;
     static int PORT;
     static boolean LAMPONLINE = false;
     private UDP_Client Client;
+    private SeekBar redSeekBar;
+    private SeekBar greenSeekBar;
+    private SeekBar blueSeekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        txt = findViewById(R.id.text);
+        colorView = findViewById(R.id.colorView);
+        connectTxt = findViewById(R.id.connectTxt);
+        connectTxt.setTextColor(0xFFFF0000);
+
+        connectTxt.setText("Disconnected");
+
         mNsdUtils = new NsdUtils(this);
         mNsdUtils.initializeNsd();
         mNsdUtils.discoverServices();
         Client = new UDP_Client();
 
-        final SeekBar seekBar = (SeekBar)findViewById(R.id.seekBar);
-        seekBar.setOnSeekBarChangeListener(this);
+        redSeekBar = (SeekBar)findViewById(R.id.redSeekBar);
+        redSeekBar.setOnSeekBarChangeListener(this);
+        greenSeekBar = (SeekBar)findViewById(R.id.greenSeekBar);
+        greenSeekBar.setOnSeekBarChangeListener(this);
+        blueSeekBar = (SeekBar)findViewById(R.id.blueSeekBar);
+        blueSeekBar.setOnSeekBarChangeListener(this);
 
 
 
     }
-    public void btnCl(View view){
-        txt.setText(IP.getHostAddress() + ": " + PORT);
+    public void connectBtnOnClick(View view){
+        if (LAMPONLINE) {
+
+            connectTxt.setText("Connected");
+            connectTxt.setTextColor(0xFF00FF00);
+        }
+        else{
+            connectTxt.setTextColor(0xFFFF0000);
+            connectTxt.setText("Disconnected");
+        }
 
     }
+
 
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (LAMPONLINE){
+            Color mColor = new Color();
+            int red = redSeekBar.getProgress();
+            int green = greenSeekBar.getProgress();
+            int blue = blueSeekBar.getProgress();
+            colorView.setBackgroundColor(Color.rgb(red, green, blue));
             Client.Message = String.valueOf(seekBar.getProgress());
-            Client.NachrichtSenden();
-            txt.setText(String.valueOf(seekBar.getProgress()));
+            Client.NachrichtSenden(IP, 9876);
+            connectTxt.setText(String.valueOf(seekBar.getProgress()));
         }
     }
 
