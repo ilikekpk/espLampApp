@@ -10,12 +10,11 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 public class UDP_Client {
-    private AsyncTask<Void, Void, Void> async_cient;
     public String Message;
 
     @SuppressLint({"NewApi", "StaticFieldLeak"})
     public void NachrichtSenden(final InetAddress ip, final int port) {
-        async_cient = new AsyncTask<Void, Void, Void>() {
+        AsyncTask<Void, Void, Void> async_cient = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 DatagramSocket ds = null;
@@ -23,9 +22,8 @@ public class UDP_Client {
                 try {
                     ds = new DatagramSocket();
                     DatagramPacket dp;
-                    InetAddress local = InetAddress.getByName(MainActivity.IP.getHostAddress());
-                    dp = new DatagramPacket(Message.getBytes(), Message.length(), local, MainActivity.PORT);
-                    //ds.setBroadcast(true);
+                    InetAddress local = InetAddress.getByName(ip.getHostAddress());
+                    dp = new DatagramPacket(Message.getBytes(), Message.length(), local, port);
                     ds.connect(ip, port);
                     ds.send(dp);
                 } catch (Exception e) {
